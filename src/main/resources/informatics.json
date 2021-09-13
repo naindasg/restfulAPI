@@ -1,0 +1,592 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "SchoolOfInformaticsAPI",
+    "description" : "This is an API for the SchoolOfInformatics"
+  },
+  "paths" : {
+    "/module/" : {
+      "post" : {
+        "tags" : [ "module" ],
+        "summary" : "Add a new module to the curriculum",
+        "operationId" : "addModule",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "module",
+          "in" : "body",
+          "description" : "Module object that needs to be added to the curriculum",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Module"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "module" ],
+        "summary" : "Find all modules",
+        "description" : "Return a list of modules",
+        "operationId" : "listAllModules",
+        "produces" : [ "application/json", "application/xml" ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid"
+          },
+          "404" : {
+            "description" : "Modules not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "module" ],
+        "summary" : "Delete all modules",
+        "operationId" : "deleteAllModules",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "module",
+          "in" : "body",
+          "description" : "Modules to delete",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Module"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid"
+          },
+          "404" : {
+            "description" : "Modules not found"
+          }
+        }
+      }
+    },
+    "/module/{moduleId}" : {
+      "get" : {
+        "tags" : [ "module" ],
+        "summary" : "Find module by ID",
+        "description" : "Returns a single module",
+        "operationId" : "getModuleById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "moduleId",
+          "in" : "path",
+          "description" : "ID of module to return",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found",
+            "schema" : {
+              "$ref" : "#/definitions/Module"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Module not found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "module" ],
+        "summary" : "Add a module to the curriculum",
+        "operationId" : "updateModule",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "moduleId",
+          "in" : "path",
+          "description" : "ID of module to return",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "module",
+          "description" : "Module that needs to be updated",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Module"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Module not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "module" ],
+        "summary" : "Deletes a module",
+        "operationId" : "deleteModule",
+        "parameters" : [ {
+          "name" : "moduleId",
+          "in" : "path",
+          "description" : "Module Id to delete",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Module not found"
+          }
+        }
+      }
+    },
+    "/module/{moduleId}/lecture" : {
+      "get" : {
+        "summary" : "find all lectures of a particular module",
+        "description" : "returns a list of modules",
+        "operationId" : "getLectureByModuleId",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "moduleId",
+          "in" : "path",
+          "description" : "ID of module",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully found"
+          },
+          "404" : {
+            "description" : "Module not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Add a new lecture to a certain module",
+        "operationId" : "addLectureToModuleId",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "moduleId",
+          "in" : "path",
+          "description" : "ModuleId for which we want to add a lecture to",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "name" : "lecture",
+          "in" : "body",
+          "description" : "Lecture object that needs to be added",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Lecture"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/convenor/{convenorId}/module" : {
+      "get" : {
+        "summary" : "find all modules taught by a particular convenor",
+        "description" : "returns a list of modules",
+        "operationId" : "getModuleByConvenorId",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "convenorId",
+          "in" : "path",
+          "description" : "ID of convenor",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Module not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        }
+      }
+    },
+    "/lecture/" : {
+      "post" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Add a new lecture to the curriculum",
+        "operationId" : "addLecture",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "lecture",
+          "in" : "body",
+          "description" : "Lecture object that needs to be added",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Lecture"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Find all lectures",
+        "description" : "Return a list of lectures",
+        "operationId" : "listAllLectures",
+        "produces" : [ "application/json", "application/xml" ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid"
+          },
+          "404" : {
+            "description" : "Lecture not found"
+          }
+        }
+      }
+    },
+    "/lecture/{lectureId}" : {
+      "get" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Find lecture by ID",
+        "description" : "Returns a single lecture",
+        "operationId" : "getLectureById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "lectureId",
+          "in" : "path",
+          "description" : "ID of lecture to return",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found",
+            "schema" : {
+              "$ref" : "#/definitions/Lecture"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Lecture not found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Update a lecture in the curriculum",
+        "operationId" : "updateLecture",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "lectureId",
+          "in" : "path",
+          "description" : "ID of lecture to return",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "lecture",
+          "description" : "Lecture that needs to be updated",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Lecture"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Lecture not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "lecture" ],
+        "summary" : "Deletes a lecture",
+        "operationId" : "deleteLecture",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "lectureId",
+          "in" : "path",
+          "description" : "Lecture Id to delete",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Lecture not found"
+          }
+        }
+      }
+    },
+    "/convenor/" : {
+      "post" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Add a new convenor",
+        "operationId" : "addConvenor",
+        "consumes" : [ "application/json", "application/xml" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "convenor",
+          "in" : "body",
+          "description" : "Convenor that needs to be added",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Convenor"
+          }
+        } ],
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "get" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Find all convenors",
+        "description" : "Return a list of convenors",
+        "operationId" : "listAllConvenors",
+        "produces" : [ "application/json", "application/xml" ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid"
+          },
+          "404" : {
+            "description" : "Convenor not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Delete all convenors",
+        "operationId" : "deleteAllConvenors",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "convenor",
+          "in" : "body",
+          "description" : "Convenors to delete",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Convenor"
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid"
+          },
+          "404" : {
+            "description" : "Modules not found"
+          }
+        }
+      }
+    },
+    "/convenor/{convenorId}" : {
+      "get" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Find convenor by ID",
+        "description" : "Returns the convenor",
+        "operationId" : "getConvenorById",
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "convenorId",
+          "in" : "path",
+          "description" : "ID of convenor to return",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found",
+            "schema" : {
+              "$ref" : "#/definitions/Convenor"
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Convenor not found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Update a convenor",
+        "operationId" : "updateConvenor",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "convenorId",
+          "in" : "path",
+          "description" : "ID of convenor to return",
+          "required" : true,
+          "type" : "integer"
+        }, {
+          "in" : "body",
+          "name" : "convenor",
+          "description" : "Convenor that needs to be updated",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Convenor"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successfully found"
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Convenor not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "convenor" ],
+        "summary" : "Deletes a convenor",
+        "operationId" : "deleteConvenor",
+        "parameters" : [ {
+          "name" : "convenorId",
+          "in" : "path",
+          "description" : "convenor Id to delete",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Convenor not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Module" : {
+      "type" : "object",
+      "required" : [ "moduleId" ],
+      "properties" : {
+        "moduleId" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "code" : {
+          "type" : "string",
+          "example" : "CO2103"
+        },
+        "title" : {
+          "type" : "string",
+          "example" : "Software Architecture"
+        },
+        "semester" : {
+          "type" : "integer",
+          "example" : 0
+        },
+        "core" : {
+          "type" : "boolean",
+          "default" : false
+        },
+        "lecture" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "$ref" : "#/definitions/Lecture"
+          }
+        }
+      }
+    },
+    "Lecture" : {
+      "required" : [ "lectureId" ],
+      "properties" : {
+        "lectureId" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "week" : {
+          "type" : "integer",
+          "example" : 0
+        },
+        "title" : {
+          "type" : "string",
+          "example" : "Unit Testing"
+        },
+        "url" : {
+          "type" : "string",
+          "example" : "https://le.ac.uk/"
+        }
+      }
+    },
+    "Convenor" : {
+      "type" : "object",
+      "required" : [ "convenorId" ],
+      "properties" : {
+        "convenorId" : {
+          "type" : "integer",
+          "example" : 1
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "Jose Rojas"
+        },
+        "position" : {
+          "type" : "string",
+          "enum" : [ "GTA", "Lecturer", "Professor" ]
+        },
+        "office" : {
+          "type" : "string",
+          "example" : "F27"
+        }
+      }
+    }
+  },
+  "host" : "localhost:8080/api"
+}
